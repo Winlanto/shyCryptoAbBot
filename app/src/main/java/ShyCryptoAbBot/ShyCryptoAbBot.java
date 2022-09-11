@@ -3,13 +3,21 @@
  */
 package ShyCryptoAbBot;
 
+import org.json.JSONObject;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.*;
+
 import static java.util.Map.entry;
 
 
@@ -25,26 +33,47 @@ public class ShyCryptoAbBot extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             SendMessage message = new SendMessage(); // Create a SendMessage object with mandatory fields
             message.setChatId(update.getMessage().getChatId().toString());
-            String request = update.getMessage().getText();
+            String call = update.getMessage().getText();
             Map<String, ? extends Serializable> sender = Map.ofEntries(
                     entry("id", update.getMessage().getFrom().getId()),
                     entry("username", "@"+update.getMessage().getFrom().getUserName()),
                     entry("firstname", update.getMessage().getFrom().getFirstName())
             );
-            StringBuilder response;
-            switch (request) {
+            StringBuilder answer;
+            switch (call) {
                 case "/start" -> {
-                    response = new StringBuilder("\uD83D\uDC4B Hey There, " + sender.get("firstname") + "! \uD83D\uDC4B\n\u2708 Welcome aboard! \u2708\n\uD83D\uDC64 "+sender.get("username")+" ID: "+sender.get("id")+" \uD83D\uDC64\n\nYou can control me by sending these commands:");
-                    for (String command : commands) response.append("\n").append(command);
+                    answer = new StringBuilder("\uD83D\uDC4B Hey There, " + sender.get("firstname") + "! \uD83D\uDC4B\n\u2708 Welcome aboard! \u2708\n\uD83D\uDC64 "+sender.get("username")+" ID: "+sender.get("id")+" \uD83D\uDC64\n\nYou can control me by sending these commands:");
+                    for (String command : commands) answer.append("\n").append(command);
                 }
                 case "/help" -> {
-                    response = new StringBuilder("Commands available:");
-                    for (String command : commands) response.append("\n").append(command);
+                    answer = new StringBuilder("Commands available:");
+                    for (String command : commands) answer.append("\n").append(command);
                 }
-                case "/test" -> response = new StringBuilder(sender.get("firstname") + " requested a quick test!");
-                default -> response = new StringBuilder("Sorry, " + sender.get("username") + "!\nThere is no such command as '" + update.getMessage().getText() + "'.\n\nTry:\n/help");
+                case "/test" -> {
+                    answer = new StringBuilder(sender.get("firstname") + " requested a quick test!\nCoinGecko ping request: ");
+                    HttpClient client=HttpClient.newHttpClient();
+                    HttpRequest request=HttpRequest.newBuilder()
+                            .uri(URI.create("https://api.coingecko.com/api/v3/ping"))
+                            .GET()
+                            .timeout(Duration.ofSeconds(1))
+                            .header("Content-Type","application/json")
+                            .build();
+                    try {
+                        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                        JSONObject obj = new JSONObject(response.body());
+                        System.out.println(obj+"\n");
+                        System.out.println(response);
+                        System.out.println(response.statusCode());
+                        System.out.println(response.headers());
+                        System.out.println(response.body());
+                        answer.append(response.body());
+                    } catch (IOException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                default -> answer = new StringBuilder("Sorry, " + sender.get("username") + "!\nThere is no such command as '" + update.getMessage().getText() + "'.\n\nTry:\n/help");
             }
-            message.setText(response.toString());
+            message.setText(answer.toString());
             try {
                 // Call method to send the message
                 execute(message);
