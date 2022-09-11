@@ -12,3 +12,7 @@ gradlew*
 
 #Ignore IntelliJ IDEA project specific directory
 .idea
+
+#Ignore jar files
+*.jar
+!libs/**/*.jar
