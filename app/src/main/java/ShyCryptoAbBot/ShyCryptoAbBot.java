@@ -21,7 +21,6 @@ public class ShyCryptoAbBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        // TODO
         ArrayList<String> commands = new ArrayList<>( Arrays.asList("/start", "/help", "/test"));
         if (update.hasMessage() && update.getMessage().hasText()) {
             SendMessage message = new SendMessage(); // Create a SendMessage object with mandatory fields
@@ -35,7 +34,7 @@ public class ShyCryptoAbBot extends TelegramLongPollingBot {
             StringBuilder response;
             switch (request) {
                 case "/start" -> {
-                    response = new StringBuilder("Hey There, " + sender.get("username") + "\uD83D\uDC4B.\n"+sender.get("firstname")+" ID: "+sender.get("id")+"\n\nYou can control me by sending these commands:");
+                    response = new StringBuilder("\uD83D\uDC4B Hey There, " + sender.get("firstname") + " \uD83D\uDC4B\n\u2708 Welcome aboard! \u2708\n\uD83D\uDC64 "+sender.get("username")+" ID: "+sender.get("id")+" \uD83D\uDC64\n\nYou can control me by sending these commands:");
                     for (String command : commands) response.append("\n").append(command);
                 }
                 case "/help" -> {
@@ -46,7 +45,6 @@ public class ShyCryptoAbBot extends TelegramLongPollingBot {
                 default -> response = new StringBuilder("Sorry, " + sender.get("username") + "!\nThere is no such command as '" + update.getMessage().getText() + "'.\n\nTry:\n/help");
             }
             message.setText(response.toString());
-
             try {
                 // Call method to send the message
                 execute(message);
@@ -58,13 +56,11 @@ public class ShyCryptoAbBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        // TODO
         return "ShyCryptoAbBot";
     }
 
     @Override
     public String getBotToken() {
-        // TODO
         return "5533092397:AAE6JscnbJ7uIefkMOoxbonZTLPYbD5swPw";
     }
 
