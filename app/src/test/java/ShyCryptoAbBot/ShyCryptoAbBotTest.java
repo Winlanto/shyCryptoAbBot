@@ -1,5 +1,10 @@
 package ShyCryptoAbBot;
+import ShyCryptoAbBot.Bot.Main;
+import ShyCryptoAbBot.Bot.ShyCryptoAbBot;
 import org.junit.*;
+
+import java.io.IOException;
+
 import static org.junit.Assert.*;
 
 class ShyCryptoAbBotTest {
@@ -7,7 +12,8 @@ class ShyCryptoAbBotTest {
     @Before public void setUp(){shyCryptoAbBot=new ShyCryptoAbBot();}
 
     @Test
-    public void verifyNoExceptionThrown(){Main.main(new String[]{});}
+    public void verifyNoExceptionThrown() throws IOException, InterruptedException {
+        Main.main(new String[]{});}
 
     @Test
     public void testGetGreeting() { assertNotNull(shyCryptoAbBot.getGreeting(), "JAVA LIVE!");}

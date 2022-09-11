@@ -30,16 +30,20 @@ dependencies {
 
     // tests
     testImplementation 'junit:junit:4.13.2'
+
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.9.1'
+    implementation 'com.google.code.gson:gson:2.9.1'
 }
 
 application {
     // Define the main class for the application.
-    mainClass = 'ShyCryptoAbBot.Main'
+    mainClass = 'ShyCryptoAbBot.Bot.Main'
 }
 
 
 jar{
     manifest{
-        attributes 'Main-Class': 'shyCryptoAbBot/Main'
+        attributes 'Main-Class': 'shyCryptoAbBot/Bot/Main'
     }
 }
