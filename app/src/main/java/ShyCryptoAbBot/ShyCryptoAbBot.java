@@ -34,7 +34,7 @@ public class ShyCryptoAbBot extends TelegramLongPollingBot {
             StringBuilder response;
             switch (request) {
                 case "/start" -> {
-                    response = new StringBuilder("\uD83D\uDC4B Hey There, " + sender.get("firstname") + " \uD83D\uDC4B\n\u2708 Welcome aboard! \u2708\n\uD83D\uDC64 "+sender.get("username")+" ID: "+sender.get("id")+" \uD83D\uDC64\n\nYou can control me by sending these commands:");
+                    response = new StringBuilder("\uD83D\uDC4B Hey There, " + sender.get("firstname") + "! \uD83D\uDC4B\n\u2708 Welcome aboard! \u2708\n\uD83D\uDC64 "+sender.get("username")+" ID: "+sender.get("id")+" \uD83D\uDC64\n\nYou can control me by sending these commands:");
                     for (String command : commands) response.append("\n").append(command);
                 }
                 case "/help" -> {
