@@ -21,11 +21,7 @@ public class Ping {
     }
 
     @Override
-    public String toString() {
-        return "Ping{" +
-                "gecko_says=" + gecko_says +
-                '}';
-    }
+    public String toString() { return "Ping{" + "gecko_says=" + gecko_says + '}';}
 
     public Ping getPing() throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
