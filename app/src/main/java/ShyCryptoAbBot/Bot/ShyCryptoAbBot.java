@@ -1,6 +1,7 @@
 package ShyCryptoAbBot.Bot;
 
 //REQUESTS
+import ShyCryptoAbBot.Request.Connection;
 import ShyCryptoAbBot.Request.Ping;
 
 //JSON
@@ -8,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 //TELEGRAM
+import com.google.gson.JsonSyntaxException;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -20,13 +22,15 @@ import java.net.http.*;
 import java.util.*;
 import static java.util.Map.entry;
 
+//CLASSES
+
 public class ShyCryptoAbBot extends TelegramLongPollingBot {
 
     public String getGreeting() {
         return "JAVA LIVE!";
     }
 
-    private static void getStringFromJson(StringBuffer response, HttpURLConnection connection) throws IOException {
+    private void getStringFromJson(StringBuffer response, HttpURLConnection connection) throws IOException {
         if(HttpURLConnection.HTTP_OK == connection.getResponseCode()) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String line;
@@ -34,9 +38,10 @@ public class ShyCryptoAbBot extends TelegramLongPollingBot {
                 response.append(line);
                 response.append("\n");
             }
-            response.deleteCharAt(0);
-            response.deleteCharAt(response.length()-2);
-            connection.disconnect();
+            /*response.deleteCharAt(0);
+            response.deleteCharAt(1);
+            response.deleteCharAt(response.length()-2);*/
+            //connection.disconnect();
         }
     }
 
@@ -68,29 +73,21 @@ public class ShyCryptoAbBot extends TelegramLongPollingBot {
                     HttpRequest request=HttpRequest.newBuilder()
                             .uri(URI.create("https://api.coingecko.com/api/v3/ping"))
                             .build();
-                    HttpResponse<String> response = null;
+                    HttpResponse<String> response;
                     try {
                         response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                        StringBuffer stringBuffer = new StringBuffer();
+                        HttpURLConnection connection = Connection.getConnection("https://api.coingecko.com/api/v3/ping");
+                        getStringFromJson(stringBuffer, connection);
                         /*Gson g = new GsonBuilder().setLenient().create();
-                        Ping ping = g.fromJson(response.toString(), Ping.class);
+                        Ping ping = g.fromJson(stringBuffer.toString(), Ping.class);
                         System.out.println("Response GET /ping: "+ping);*/
                         answer.append(response);
-                    } catch (IOException | InterruptedException e) {
+                        System.out.println("Response body: "+(response));
+
+                    } catch (IOException | InterruptedException /*| IllegalStateException | JsonSyntaxException*/ e) {
                         e.printStackTrace();
                     }
-                    System.out.println("Response body: "+ (response != null ? response.body() : null));
-                   /* try {
-                        HttpClient client = HttpClient.newHttpClient();
-                        HttpRequest request = HttpRequest.newBuilder()
-                                .uri(URI.create("https://api.coingecko.com/api/v3/ping\n"))
-                                .build();
-                        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                        System.out.println("Response body: "+response.body());
-
-
-                    } catch (IOException | InterruptedException e) {
-                        e.printStackTrace();
-                    }*/
                 }
                 default -> answer = new StringBuilder("Sorry, " + sender.get("username") + "!\nThere is no such command as '" + update.getMessage().getText() + "'.\n\nTry:\n/help");
             }
