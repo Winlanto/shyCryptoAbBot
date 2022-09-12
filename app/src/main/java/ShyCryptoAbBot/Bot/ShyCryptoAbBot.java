@@ -29,7 +29,7 @@ public class ShyCryptoAbBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        ArrayList<String> commands = new ArrayList<>(Arrays.asList("/start", "/help", "/test"));
+        ArrayList<String> commands = new ArrayList<>(Arrays.asList("/start", "/help", "/ping"));
         if (update.hasMessage() && update.getMessage().hasText()) {
             String call = update.getMessage().getText();
             Map<String, ? extends Serializable> sender = Map.ofEntries(
@@ -45,7 +45,7 @@ public class ShyCryptoAbBot extends TelegramLongPollingBot {
                 }case "/help" -> {
                     answer = new StringBuilder("Commands available:");
                     for (String command : commands) answer.append("\n").append(command);
-                }case "/test" -> {
+                }case "/ping" -> {
                     Ping ping = null;
                     try {
                         ping = new Ping().getPing();
