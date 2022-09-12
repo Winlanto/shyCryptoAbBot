@@ -12,7 +12,7 @@ public class Main {
         ShyCryptoAbBot shyCryptoAbBot = new ShyCryptoAbBot();
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-            botsApi.registerBot(new ShyCryptoAbBot());
+            botsApi.registerBot(shyCryptoAbBot);
             System.out.println(shyCryptoAbBot.getGreeting());
         } catch (TelegramApiException e) {
             e.printStackTrace();

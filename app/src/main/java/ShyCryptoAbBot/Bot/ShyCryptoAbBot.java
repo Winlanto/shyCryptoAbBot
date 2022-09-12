@@ -5,8 +5,6 @@ package ShyCryptoAbBot.Bot;
 import ShyCryptoAbBot.Request.Ping;
 
 //JSON
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 //TELEGRAM
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -50,9 +48,16 @@ public class ShyCryptoAbBot extends TelegramLongPollingBot {
                     answer = new StringBuilder("Commands available:");
                     for (String command : commands) answer.append("\n").append(command);
                 }case "/test" -> {
-                    Ping ping = new Ping();
+                    Ping ping = null;
+                    try {
+                        ping = new Ping().getPing();
+                    } catch (IOException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     answer = new StringBuilder(sender.get("firstname") + " requested a quick test!\nCoinGecko ping request: " + ping + "\n");
-                    System.out.println("Response body: " + (ping.getGecko_says()));
+                    if (ping != null) {
+                        System.out.println("Response body: " + (ping.getGecko_says()));
+                    }
                 }default -> answer = new StringBuilder("Sorry, " + sender.get("username") + "!\nThere is no such command as '" + update.getMessage().getText() + "'.\n\nTry:\n/help");
             }
             SendMessage message = new SendMessage(); // Create a SendMessage object with mandatory fields
