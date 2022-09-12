@@ -33,13 +33,9 @@ public class Ping {
                 .uri(URI.create(url))
                 .build();
 
-        HttpResponse<String> response = client.send(request,
-                HttpResponse.BodyHandlers.ofString());
-
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         Ping ping = new Gson().fromJson(response.body(), Ping.class);
-
         setGecko_says(ping.getGecko_says());
-
         return this;
     }
 }
