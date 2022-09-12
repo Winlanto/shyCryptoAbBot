@@ -13,9 +13,7 @@ public class Main {
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(new ShyCryptoAbBot());
-            System.out.println("\n"+shyCryptoAbBot.getGreeting());
-            System.out.println("CONNECTED TO BOT:");
-            Arrays.asList("Bot token: " + shyCryptoAbBot.getBotUsername(), "Bot username: " + shyCryptoAbBot.getBotToken(), "Bot base url: " + shyCryptoAbBot.getBaseUrl() + "\n").forEach(System.out::println);
+            System.out.println(shyCryptoAbBot.getGreeting());
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }

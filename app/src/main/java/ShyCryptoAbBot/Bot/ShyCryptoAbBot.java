@@ -9,7 +9,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 //TELEGRAM
-import com.google.gson.JsonSyntaxException;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -27,7 +26,10 @@ import static java.util.Map.entry;
 public class ShyCryptoAbBot extends TelegramLongPollingBot {
 
     public String getGreeting() {
-        return "JAVA LIVE!";
+        String greeting = "\nJAVA LIVE!";
+        greeting +="\n\nCONNECTED TO BOT:";
+        greeting +="\nBot token: "+getBotUsername()+"\nBot username: "+getBotToken()+"\nBot base url: " + getBaseUrl() + "\n";
+        return greeting;
     }
 
     private void getStringFromJson(StringBuffer response, HttpURLConnection connection) throws IOException {
@@ -41,7 +43,7 @@ public class ShyCryptoAbBot extends TelegramLongPollingBot {
             /*response.deleteCharAt(0);
             response.deleteCharAt(1);
             response.deleteCharAt(response.length()-2);*/
-            //connection.disconnect();
+            connection.disconnect();
         }
     }
 
@@ -79,8 +81,9 @@ public class ShyCryptoAbBot extends TelegramLongPollingBot {
                         StringBuffer stringBuffer = new StringBuffer();
                         HttpURLConnection connection = Connection.getConnection("https://api.coingecko.com/api/v3/ping");
                         getStringFromJson(stringBuffer, connection);
-                        /*Gson g = new GsonBuilder().setLenient().create();
-                        Ping ping = g.fromJson(stringBuffer.toString(), Ping.class);
+                        System.out.println(stringBuffer);
+                        Gson g = new GsonBuilder().setLenient().create();
+                        /*Ping ping = g.fromJson(stringBuffer.toString(), Ping.class);
                         System.out.println("Response GET /ping: "+ping);*/
                         answer.append(response);
                         System.out.println("Response body: "+(response));
