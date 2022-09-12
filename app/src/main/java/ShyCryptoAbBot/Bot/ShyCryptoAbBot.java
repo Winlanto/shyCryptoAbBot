@@ -20,9 +20,7 @@ import static java.util.Map.entry;
 
 public class ShyCryptoAbBot extends TelegramLongPollingBot {
 
-    public ShyCryptoAbBot() {
-        new Greeting(getBotUsername(), getBotToken(), getBaseUrl());
-    }
+    public ShyCryptoAbBot() {new Greeting(getBotUsername(), getBotToken(), getBaseUrl());}
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -48,7 +46,6 @@ public class ShyCryptoAbBot extends TelegramLongPollingBot {
                     } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }
-
                     if (ping != null) {
                         answer = new StringBuilder(sender.get("firstname") + " requested a quick test!\nCoinGecko ping request:\n" + ping.getGecko_says() + "\n");
                         System.out.println("Response body: " + (ping.getGecko_says()));
