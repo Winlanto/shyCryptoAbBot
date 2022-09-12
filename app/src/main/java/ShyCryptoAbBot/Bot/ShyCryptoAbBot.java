@@ -1,11 +1,11 @@
 package ShyCryptoAbBot.Bot;
 
 //REQUESTS
-
 import ShyCryptoAbBot.Request.Greeting;
+import ShyCryptoAbBot.Request.Help;
 import ShyCryptoAbBot.Request.Ping;
+import ShyCryptoAbBot.Request.Start;
 
-//JSON
 
 //TELEGRAM
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -16,10 +16,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 //JAVA CORE
 import java.io.*;
 import java.util.*;
-
 import static java.util.Map.entry;
-
-//CLASSES
 
 public class ShyCryptoAbBot extends TelegramLongPollingBot {
 
@@ -29,7 +26,6 @@ public class ShyCryptoAbBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        ArrayList<String> commands = new ArrayList<>(Arrays.asList("/start", "/help", "/ping"));
         if (update.hasMessage() && update.getMessage().hasText()) {
             String call = update.getMessage().getText();
             Map<String, ? extends Serializable> sender = Map.ofEntries(
@@ -37,14 +33,14 @@ public class ShyCryptoAbBot extends TelegramLongPollingBot {
                     entry("username", "@" + update.getMessage().getFrom().getUserName()),
                     entry("firstname", update.getMessage().getFrom().getFirstName())
             );
-            StringBuilder answer = new StringBuilder("error");
+            ArrayList<String> commands = new ArrayList<>(Arrays.asList("/start", "/help", "/ping"));
+            StringBuilder answer = new StringBuilder();
             switch (call) {
                 case "/start" -> {
-                    answer = new StringBuilder("\uD83D\uDC4B Hey There, " + sender.get("firstname") + "! \uD83D\uDC4B\n\u2708 Welcome aboard! \u2708\n\uD83D\uDC64 " + sender.get("username") + " ID: " + sender.get("id") + " \uD83D\uDC64\n\nYou can control me by sending these commands:");
-                    for (String command : commands) answer.append("\n").append(command);
+                    new Start(sender, answer);
+                    new Help(commands, answer);
                 }case "/help" -> {
-                    answer = new StringBuilder("Commands available:");
-                    for (String command : commands) answer.append("\n").append(command);
+                    new Help(commands, answer);
                 }case "/ping" -> {
                     Ping ping = null;
                     try {
