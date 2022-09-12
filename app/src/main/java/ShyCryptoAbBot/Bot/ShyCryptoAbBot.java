@@ -37,7 +37,7 @@ public class ShyCryptoAbBot extends TelegramLongPollingBot {
                     entry("username", "@" + update.getMessage().getFrom().getUserName()),
                     entry("firstname", update.getMessage().getFrom().getFirstName())
             );
-            StringBuilder answer;
+            StringBuilder answer = new StringBuilder("error");
             switch (call) {
                 case "/start" -> {
                     answer = new StringBuilder("\uD83D\uDC4B Hey There, " + sender.get("firstname") + "! \uD83D\uDC4B\n\u2708 Welcome aboard! \u2708\n\uD83D\uDC64 " + sender.get("username") + " ID: " + sender.get("id") + " \uD83D\uDC64\n\nYou can control me by sending these commands:");
@@ -52,7 +52,7 @@ public class ShyCryptoAbBot extends TelegramLongPollingBot {
                     } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }
-                    answer = new StringBuilder("error");
+
                     if (ping != null) {
                         answer = new StringBuilder(sender.get("firstname") + " requested a quick test!\nCoinGecko ping request:\n" + ping.getGecko_says() + "\n");
                         System.out.println("Response body: " + (ping.getGecko_says()));
