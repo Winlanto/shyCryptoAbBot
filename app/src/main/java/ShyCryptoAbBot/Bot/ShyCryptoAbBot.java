@@ -2,6 +2,7 @@ package ShyCryptoAbBot.Bot;
 
 //REQUESTS
 
+import ShyCryptoAbBot.Request.Greeting;
 import ShyCryptoAbBot.Request.Ping;
 
 //JSON
@@ -22,11 +23,8 @@ import static java.util.Map.entry;
 
 public class ShyCryptoAbBot extends TelegramLongPollingBot {
 
-    public String getGreeting() {
-        String greeting = "\nJAVA LIVE!";
-        greeting += "\n\nCONNECTED TO BOT:";
-        greeting += "\nBot token: " + getBotUsername() + "\nBot username: " + getBotToken() + "\nBot base url: " + getBaseUrl() + "\n";
-        return greeting;
+    public ShyCryptoAbBot() {
+        new Greeting(getBotUsername(), getBotToken(), getBaseUrl());
     }
 
     @Override
@@ -54,8 +52,9 @@ public class ShyCryptoAbBot extends TelegramLongPollingBot {
                     } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }
-                    answer = new StringBuilder(sender.get("firstname") + " requested a quick test!\nCoinGecko ping request: " + ping + "\n");
+                    answer = new StringBuilder("error");
                     if (ping != null) {
+                        answer = new StringBuilder(sender.get("firstname") + " requested a quick test!\nCoinGecko ping request:\n" + ping.getGecko_says() + "\n");
                         System.out.println("Response body: " + (ping.getGecko_says()));
                     }
                 }default -> answer = new StringBuilder("Sorry, " + sender.get("username") + "!\nThere is no such command as '" + update.getMessage().getText() + "'.\n\nTry:\n/help");
@@ -84,5 +83,4 @@ public class ShyCryptoAbBot extends TelegramLongPollingBot {
     public String getBotToken() {
         return "5533092397:AAE6JscnbJ7uIefkMOoxbonZTLPYbD5swPw";
     }
-
 }
